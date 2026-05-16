@@ -38,8 +38,8 @@
           </div>
         </div>
         <div class="hero-card reveal photo-card-main">
-          <img src="moto-mecanique-14.jpg" alt="Photographie moto Instant.GH" class="photo-fill" onerror="this.src='animalier-01.jpg'" />
-          <div class="photo-overlay"><span>Photo d’accroche</span><strong>Puissance · Mouvement · Terrain</strong></div>
+          <img id="hero-carousel-image" src="moto-mecanique-14.jpg" alt="Photographie Instant.GH" class="photo-fill" />
+          <div class="photo-overlay"><strong id="hero-carousel-title">Puissance · Mouvement · Terrain</strong></div>
         </div>
       </section>
     </header>
@@ -64,21 +64,12 @@
 
       <section class="section" id="univers">
         <div class="section-heading reveal"><p class="eyebrow">Univers photo</p><h2>Sept catégories pour une lecture claire.</h2></div>
-        <div class="cards-grid">
-          <article class="universe-card reveal photo-universe"><img src="moto-mecanique-14.jpg" alt="Moto & mécanique - Instant.GH" onerror="this.remove()" /><div><span>01</span><h3>Moto & mécanique</h3><p>portraits pilotes, action circuit, détails mécaniques, muscle cars</p></div></article>
-          <article class="universe-card reveal photo-universe"><img src="sport-collectifs-08.jpg" alt="Sport & collectifs - Instant.GH" onerror="this.remove()" /><div><span>02</span><h3>Sport & collectifs</h3><p>hockey, action glace, portraits joueurs, coulisses</p></div></article>
-          <article class="universe-card reveal photo-universe"><img src="aviation-01.jpg" alt="Aviation - Instant.GH" onerror="this.remove()" /><div><span>03</span><h3>Aviation</h3><p>meetings aériens, acrobaties, vintage WWII</p></div></article>
-          <article class="universe-card reveal photo-universe"><img src="evenementiel-24.jpg" alt="Événementiel - Instant.GH" onerror="this.src='evenementiel-01.jpg'" /><div><span>04</span><h3>Événementiel</h3><p>concerts, festivals, événements nocturnes, reconstitution</p></div></article>
-          <article class="universe-card reveal photo-universe"><img src="defense-defiles-01.jpg" alt="Défense & défilés - Instant.GH" onerror="this.remove()" /><div><span>05</span><h3>Défense & défilés</h3><p>blindés, défilés, cavalerie</p></div></article>
-          <article class="universe-card reveal photo-universe"><img src="animalier-01.jpg" alt="Animalier - Instant.GH" onerror="this.remove()" /><div><span>06</span><h3>Animalier</h3><p>faune, oiseaux, macro, animaux de compagnie</p></div></article>
-          <article class="universe-card reveal photo-universe"><img src="portrait-11.jpg" alt="Portrait - Instant.GH" onerror="this.src='portrait-01.jpg'" /><div><span>07</span><h3>Portrait</h3><p>sportifs, musiciens, artisans, motards</p></div></article>
-        </div>
+        <div class="cards-grid" id="universe-cards"></div>
       </section>
 
       <section class="section dark" id="series">
         <div class="section-heading reveal"><p class="eyebrow">Séries</p><h2>Des galeries par thème.</h2></div>
         <div class="category-list" id="category-list"></div>
-        <p class="workflow-note">Les séries sont pensées pour montrer une cohérence : une image forte, des variations, des détails et une ambiance. Les photos sont compressées pour le web afin de garder un site fluide sur ordinateur comme sur téléphone.</p>
       </section>
 
       <section class="section" id="projets">
@@ -120,20 +111,57 @@
         {id:'animalier', title:'Animalier', cover:'animalier-01.jpg', count:11, text:'Regards, instinct, présence et détails naturels.', tags:['faune','oiseaux','macro','animaux de compagnie']},
         {id:'portrait', title:'Portrait', cover:'portrait-11.jpg', count:11, text:'Portraits dynamiques, en situation, liés à un univers.', tags:['sportifs','musiciens','artisans','motards']}
       ];
-      const target = document.getElementById('category-list');
+
       const pad = n => String(n).padStart(2, '0');
-      categories.forEach(cat => {
+      const imagePath = (cat, n) => `${cat.id}-${pad(n)}.jpg`;
+      const universeCards = document.getElementById('universe-cards');
+      const categoryList = document.getElementById('category-list');
+
+      categories.forEach((cat, index) => {
+        const card = document.createElement('article');
+        card.className = 'universe-card reveal photo-universe';
+        card.innerHTML = `<img src="${cat.cover}" alt="${cat.title} - Instant.GH" onerror="this.remove()" /><div><span>${pad(index + 1)}</span><h3>${cat.title}</h3><p>${cat.tags.join(', ')}</p></div>`;
+        universeCards.appendChild(card);
+
         const article = document.createElement('article');
         article.className = 'category-block reveal';
         article.id = cat.id;
         const tags = cat.tags.map(t => `<span>${t}</span>`).join('');
-        const imgs = Array.from({length: cat.count}, (_, i) => {
-          const src = `${cat.id}-${pad(i+1)}.jpg`;
-          return `<img loading="lazy" src="${src}" alt="${cat.title} ${pad(i+1)} - Instant.GH" onerror="this.remove()" />`;
-        }).join('');
-        article.innerHTML = `<h3>${cat.title}</h3><p>${cat.text}</p><div class="category-meta">${tags}</div><div class="category-cover"><img src="${cat.cover}" alt="Image de couverture ${cat.title} - Instant.GH" onerror="this.parentElement.remove()" /><span class="category-cover-label">Image forte</span></div><div class="category-gallery">${imgs}</div>`;
-        target.appendChild(article);
+        const coverNumber = Number((cat.cover.match(/-(\d+)\.jpg$/) || [])[1]);
+        const order = [coverNumber, ...Array.from({length: cat.count}, (_, i) => i + 1).filter(n => n !== coverNumber && n <= cat.count)].filter(Boolean);
+        const imgs = order.map(n => `<img loading="lazy" src="${imagePath(cat, n)}" alt="${cat.title} ${pad(n)} - Instant.GH" onerror="this.remove()" />`).join('');
+        article.innerHTML = `<div class="category-head"><div><h3>${cat.title}</h3><p>${cat.text}</p></div><button class="scroll-gallery-button" type="button">Faire défiler →</button></div><div class="category-meta">${tags}</div><div class="category-gallery horizontal-gallery">${imgs}</div>`;
+        categoryList.appendChild(article);
       });
+
+      document.querySelectorAll('.scroll-gallery-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const gallery = button.closest('.category-block').querySelector('.horizontal-gallery');
+          gallery.scrollBy({ left: gallery.clientWidth * 0.85, behavior: 'smooth' });
+        });
+      });
+
+      const heroImages = [
+        ['moto-mecanique-14.jpg', 'Puissance · Mouvement · Terrain'],
+        ['aviation-01.jpg', 'Précision · Ciel · Vitesse'],
+        ['animalier-01.jpg', 'Regard · Instinct · Présence'],
+        ['defense-defiles-01.jpg', 'Action · Poussière · Terrain'],
+        ['sport-collectifs-08.jpg', 'Collectif · Tension · Geste'],
+        ['evenementiel-24.jpg', 'Lumière · Scène · Émotion'],
+        ['portrait-11.jpg', 'Portrait · Présence · Instant']
+      ];
+      let heroIndex = 0;
+      const heroImg = document.getElementById('hero-carousel-image');
+      const heroTitle = document.getElementById('hero-carousel-title');
+      setInterval(() => {
+        heroIndex = (heroIndex + 1) % heroImages.length;
+        heroImg.style.opacity = '0';
+        setTimeout(() => {
+          heroImg.src = heroImages[heroIndex][0];
+          heroTitle.textContent = heroImages[heroIndex][1];
+          heroImg.style.opacity = '0.92';
+        }, 250);
+      }, 4200);
     </script>
     <script src="script.js"></script>
   </body>
