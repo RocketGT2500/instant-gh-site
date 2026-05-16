@@ -21,7 +21,6 @@
         <div class="nav-links" id="main-menu">
           <a href="#demarche">Démarche</a>
           <a href="#apropos">À propos</a>
-          <a href="#univers">Univers</a>
           <a href="#series">Séries</a>
           <a href="#contact">Contact</a>
         </div>
@@ -60,11 +59,6 @@
           <article class="about-card reveal"><strong>Photographie de terrain</strong><p>Instant.GH est né d’une envie simple : transformer des scènes vécues sur le terrain en images fortes, sobres et lisibles. Moto, hockey, meetings aériens, concerts, animalier ou événements historiques : je privilégie les sujets où le mouvement, la lumière et l’émotion existent déjà.</p></article>
           <article class="status-card reveal"><h3>Une approche directe</h3><p>Chaque série est construite pour raconter un sujet avec cohérence : une accroche forte, des détails, de l’action, une ambiance et une image finale mémorable.</p><p>Pour une collaboration, une série photo ou un événement à documenter, le contact reste simple et direct.</p></article>
         </div>
-      </section>
-
-      <section class="section" id="univers">
-        <div class="section-heading reveal"><p class="eyebrow">Univers photo</p><h2>Sept catégories pour une lecture claire.</h2></div>
-        <div class="cards-grid" id="universe-cards"></div>
       </section>
 
       <section class="section dark" id="series">
@@ -114,15 +108,9 @@
 
       const pad = n => String(n).padStart(2, '0');
       const imagePath = (cat, n) => `${cat.id}-${pad(n)}.jpg`;
-      const universeCards = document.getElementById('universe-cards');
       const categoryList = document.getElementById('category-list');
 
-      categories.forEach((cat, index) => {
-        const card = document.createElement('article');
-        card.className = 'universe-card reveal photo-universe';
-        card.innerHTML = `<img src="${cat.cover}" alt="${cat.title} - Instant.GH" onerror="this.remove()" /><div><span>${pad(index + 1)}</span><h3>${cat.title}</h3><p>${cat.tags.join(', ')}</p></div>`;
-        universeCards.appendChild(card);
-
+      categories.forEach(cat => {
         const article = document.createElement('article');
         article.className = 'category-block reveal';
         article.id = cat.id;
@@ -130,14 +118,35 @@
         const coverNumber = Number((cat.cover.match(/-(\d+)\.jpg$/) || [])[1]);
         const order = [coverNumber, ...Array.from({length: cat.count}, (_, i) => i + 1).filter(n => n !== coverNumber && n <= cat.count)].filter(Boolean);
         const imgs = order.map(n => `<img loading="lazy" src="${imagePath(cat, n)}" alt="${cat.title} ${pad(n)} - Instant.GH" onerror="this.remove()" />`).join('');
-        article.innerHTML = `<div class="category-head"><div><h3>${cat.title}</h3><p>${cat.text}</p></div><button class="scroll-gallery-button" type="button">Faire défiler →</button></div><div class="category-meta">${tags}</div><div class="category-gallery horizontal-gallery">${imgs}</div>`;
+        article.innerHTML = `
+          <div class="category-head">
+            <div><h3>${cat.title}</h3><p>${cat.text}</p></div>
+            <div class="gallery-actions">
+              <button class="scroll-gallery-button" type="button">Faire défiler →</button>
+              <button class="toggle-gallery-button" type="button">Tout afficher</button>
+            </div>
+          </div>
+          <div class="category-meta">${tags}</div>
+          <div class="category-gallery horizontal-gallery">${imgs}</div>`;
         categoryList.appendChild(article);
       });
 
       document.querySelectorAll('.scroll-gallery-button').forEach(button => {
         button.addEventListener('click', () => {
-          const gallery = button.closest('.category-block').querySelector('.horizontal-gallery');
+          const block = button.closest('.category-block');
+          const gallery = block.querySelector('.category-gallery');
+          gallery.classList.remove('expanded-gallery');
+          const toggle = block.querySelector('.toggle-gallery-button');
+          toggle.textContent = 'Tout afficher';
           gallery.scrollBy({ left: gallery.clientWidth * 0.85, behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.toggle-gallery-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const gallery = button.closest('.category-block').querySelector('.category-gallery');
+          gallery.classList.toggle('expanded-gallery');
+          button.textContent = gallery.classList.contains('expanded-gallery') ? 'Réduire' : 'Tout afficher';
         });
       });
 
