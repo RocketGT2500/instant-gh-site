@@ -131,14 +131,15 @@
 
     <script>
       const range = (max, excludes = []) => Array.from({length: max}, (_, i) => i + 1).filter(n => !excludes.includes(n));
+      const order = values => values.filter(Boolean);
       const categories = [
-        {id:'moto-mecanique', title:'Moto & mécanique', cover:'moto-mecanique-14.jpg', images:range(28,[3]), text:'Puissance mécanique, silhouettes, détails et sujets en mouvement.', tags:['portraits pilotes','action circuit','détails mécaniques','muscle cars']},
-        {id:'sport-collectifs', title:'Sport & collectifs', cover:'sport-collectifs-08.jpg', images:range(8), text:'Le sport comme sujet de tension collective : action, groupe, regard de match, coulisses.', tags:['hockey','action glace','portraits joueurs','coulisses']},
-        {id:'aviation', title:'Aviation', cover:'aviation-01.jpg', images:range(9), text:'Meetings aériens, patrouilles, acrobaties et machines de légende.', tags:['meetings aériens','acrobaties','vintage WWII']},
-        {id:'evenementiel', title:'Événementiel', cover:'evenementiel-24.jpg', images:range(24,[9]), text:'Concerts, festivals, scènes nocturnes et ambiances fortes.', tags:['concerts','festivals','événements nocturnes','reconstitution']},
-        {id:'defense-defiles', title:'Défense & défilés', cover:'defense-defiles-01.jpg', images:range(8,[3]), text:'Action, poussière, blindés, défilés et scènes de terrain.', tags:['blindés','défilés','cavalerie']},
-        {id:'animalier', title:'Animalier', cover:'animalier-01.jpg', images:range(11), text:'Regards, instinct, présence et détails naturels.', tags:['faune','oiseaux','macro','animaux de compagnie']},
-        {id:'portrait', title:'Portrait', cover:'portrait-11.jpg', images:range(11), text:'Portraits dynamiques, en situation, liés à un univers.', tags:['sportifs','musiciens','artisans','motards']}
+        {id:'moto-mecanique', title:'Moto & mécanique', cover:'moto-mecanique-14.jpg', images:order([1,2,4,5,6,7,8,14,9,10,11,12,13,15,16,17,18,19,20,21,22,23,24,25,26,27,28]), text:'Détails mécaniques, voitures de caractère, puis motos en action et portraits de motards.', tags:['détails mécaniques','muscle cars','action circuit','portraits pilotes']},
+        {id:'sport-collectifs', title:'Sport & collectifs', cover:'sport-collectifs-08.jpg', images:order([8,1,2,3,4,5,6,7]), text:'Le sport comme sujet de tension collective : groupe, portraits, action, regard de match.', tags:['hockey','collectif','action glace','portraits joueurs']},
+        {id:'aviation', title:'Aviation', cover:'aviation-01.jpg', images:order([1,2,3,4,5,6,7,8,9]), text:'Meetings aériens, patrouilles, acrobaties et machines de légende.', tags:['meetings aériens','patrouilles','acrobaties','vintage WWII']},
+        {id:'evenementiel', title:'Événementiel', cover:'evenementiel-24.jpg', images:order([24,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23]), text:'Concerts, festivals, scènes nocturnes et ambiances fortes.', tags:['concerts','festivals','événements nocturnes','reconstitution']},
+        {id:'defense-defiles', title:'Défense & défilés', cover:'defense-defiles-01.jpg', images:order([1,2,4,5,6,7,8]), text:'Action, poussière, blindés, défilés et scènes de terrain.', tags:['blindés','défilés','cavalerie']},
+        {id:'animalier', title:'Animalier', cover:'animalier-01.jpg', images:order([1,2,3,4,5,6,7,8,9,10,11]), text:'Regards, instinct, présence et détails naturels.', tags:['faune','oiseaux','macro','animaux de compagnie']},
+        {id:'portrait', title:'Portrait', cover:'portrait-11.jpg', images:order([11,1,2,3,4,5,6,7,8,9,10]), text:'Portraits dynamiques, en situation, liés à un univers.', tags:['sportifs','musiciens','artisans','motards']}
       ];
 
       const altTexts = {
@@ -160,9 +161,7 @@
         article.className = 'category-block reveal';
         article.id = cat.id;
         const tags = cat.tags.map(t => `<span>${t}</span>`).join('');
-        const coverNumber = Number((cat.cover.match(/-(\d+)\.jpg$/) || [])[1]);
-        const orderedImages = [coverNumber, ...cat.images.filter(n => n !== coverNumber)].filter(Boolean);
-        const imgs = orderedImages.map(n => `<img loading="lazy" src="${imagePath(cat, n)}" alt="${altTexts[cat.id]} ${pad(n)}" onerror="this.remove()" />`).join('');
+        const imgs = cat.images.map(n => `<img loading="eager" src="${imagePath(cat, n)}" alt="${altTexts[cat.id]} ${pad(n)}" onerror="this.remove()" />`).join('');
         article.innerHTML = `
           <div class="category-head">
             <div><h3>${cat.title}</h3><p>${cat.text}</p></div>
