@@ -61,20 +61,29 @@ function applyGalleryOrder(categoryId, preferredOrder, newText) {
 applyGalleryOrder(
   "moto-mecanique",
   [
-    1, 9, 10, 11, 12, 13, 15, 16, 17, 18,
-    2, 6, 7, 8, 4, 5, 14, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
+    // Bloc 1 — motos en mouvement et portraits motards
+    1, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20,
+    // Bloc 2 — détails moto / mécanique
+    21, 22, 23, 24, 25, 26, 27, 28,
+    // Bloc 3 — détails auto et voitures de caractère
+    2, 6, 7, 8, 4, 5, 14
   ],
-  "Motos en action, portraits de motards, détails mécaniques puis voitures de caractère."
+  "Motos en action et portraits de motards, puis détails mécaniques et voitures de caractère."
 );
 
 applyGalleryOrder(
   "evenementiel",
   [
-    24, 5, 7, 12, 13, 14, 15, 16,
-    6, 8, 10, 11, 17, 18, 19, 20, 21, 22, 23,
-    2, 3, 4, 1
+    // Bloc 1 — concerts et scène
+    24, 5, 7, 17, 18, 19, 20, 21, 22, 23, 1,
+    // Bloc 2 — Hellfest / festival / décors
+    12, 13, 14, 15, 16, 3, 4, 11,
+    // Bloc 3 — reconstitution / médiéval
+    6, 8, 10,
+    // Bloc 4 — ambiance isolée / paysage
+    2
   ],
-  "Concerts et scènes vivantes, puis reconstitution, festivals, nocturnes et ambiances fortes."
+  "Concerts et scènes vivantes, puis festival, reconstitution et ambiances fortes."
 );
 
 const contactForm = document.querySelector(".contact-form");
