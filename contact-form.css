@@ -1,5 +1,6 @@
 .contact-form{margin-top:26px;display:grid;gap:18px;color:#111}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.contact-form label{display:grid;gap:8px;color:#18181b;font-weight:800}.contact-form span{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:#52525b}.contact-form input,.contact-form select,.contact-form textarea{width:100%;box-sizing:border-box;border:1px solid rgba(0,0,0,.16);border-radius:16px;background:#fff;color:#111;padding:14px 15px;font:inherit;outline:none}.contact-form input::placeholder,.contact-form textarea::placeholder{color:#71717a}.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{border-color:#050505;box-shadow:0 0 0 3px rgba(0,0,0,.08);background:#fff}.contact-form select option{background:#fff;color:#111}.contact-form textarea{min-height:150px;resize:vertical}.form-full{grid-column:1/-1}.form-note{color:#52525b;line-height:1.6;margin:0}.contact-card .contact-socials{margin-top:34px}.contact-card .dark-button{background:#111;color:#fff}.contact-card .light-ghost{background:#fff!important;color:#050505!important;border:1px solid rgba(0,0,0,.22)!important}.contact-card .light-ghost:hover{background:#f4f4f5!important;border-color:#050505!important}.form-submit{justify-self:start;border:0;border-radius:999px;padding:14px 22px;background:#050505;color:#fff;font-weight:900;cursor:pointer}.form-submit:hover{transform:translateY(-2px)}.form-submit:disabled{opacity:.65;cursor:wait;transform:none}.form-status{margin:0;padding:14px 16px;border-radius:16px;line-height:1.55;font-weight:700}.form-status:empty{display:none}.form-status.ok{background:#e8f5e9;color:#1b5e20}.form-status.error{background:#fff3e0;color:#7c2d12}.form-status a{text-decoration:underline}.hidden-field{display:none!important}@media(max-width:860px){.form-grid{grid-template-columns:1fr}.form-submit{width:100%}.contact-card .contact-socials{display:grid;grid-template-columns:1fr;gap:12px}.contact-card .contact-socials .button{width:100%}} 
 .tally-link-card {
+.tally-embed-card {
   padding: 28px;
   border-radius: 24px;
   background: #ffffff;
@@ -7,19 +8,32 @@
   color: #111;
 }
 
-.tally-link-card h3 {
+.tally-embed-card h3 {
   margin: 0 0 14px;
   font-size: 28px;
   letter-spacing: -0.04em;
 }
 
-.tally-link-card p {
+.tally-embed-card p {
   color: #52525b;
   line-height: 1.7;
+  margin-bottom: 18px;
 }
 
-.tally-button {
-  margin-top: 18px;
-  background: #050505;
-  color: #fff;
+.tally-embed-card iframe {
+  width: 100%;
+  min-height: 720px;
+  border: 0;
+  border-radius: 18px;
+  background: #fff;
+}
+
+@media(max-width:860px) {
+  .tally-embed-card {
+    padding: 20px;
+  }
+
+  .tally-embed-card iframe {
+    min-height: 820px;
+  }
 }
