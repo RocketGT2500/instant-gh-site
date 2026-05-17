@@ -426,7 +426,7 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 0.55fr;
   gap: 48px;
-  align-items: end;
+  align-items: start;
   padding: clamp(34px, 6vw, 70px);
   border-radius: 34px;
   background: #f5f5f5;
